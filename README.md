@@ -16,6 +16,8 @@ vim 模板插件
 
 ## 致谢    
 本插件受到下面项目启发:
+
  [aperezdc/vim-template](https://github.com/aperezdc/vim-template)
+
  [hotoo/template.vim](https://github.com/hotoo/template.vim)
 
