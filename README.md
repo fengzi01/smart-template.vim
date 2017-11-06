@@ -1,5 +1,6 @@
 # smart-template.vim
-一个重复造轮子的项目. vim模板插件
+vim 模板插件
+一个重复造轮子的项目 
 ## 设计目标
 
  - 基本模板功能
@@ -15,6 +16,6 @@
 
 ## 致谢    
 本插件受到下面项目启发:
- (aperezdc/vim-template)[https://github.com/aperezdc/vim-template]
- (hotoo/template.vim)[https://github.com/hotoo/template.vim]
+ [aperezdc/vim-template](https://github.com/aperezdc/vim-template)
+ [hotoo/template.vim](https://github.com/hotoo/template.vim)
 
