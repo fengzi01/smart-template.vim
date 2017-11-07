@@ -11,6 +11,14 @@ endif
 
 let g:smart_template_plugin_loaded = 1
 
+if !exists('g:smart_template_autocmd')
+    let g:smart_template_autocmd = 1
+endif
+
+if !exists('g:smart_template_debug')
+    let g:smart_template_debug = 1
+endif
+
 " init 
 " 用户信息 
 if !exists('g:user_name') 
@@ -22,7 +30,7 @@ endif
 
 " 搜索目录(array)
 if !exists('g:smart_template_dir') 
-    let g:smart_template_dir = [];
+    let g:smart_template_dir = $HOME . "/.vim/bundle/smart-template.vim/templates/"
 endif 
 
 if !exists('g:smart_template_module_mode')
@@ -42,13 +50,13 @@ endif
 
 " 用户自定义变量
 if !exists('g:smart_template_custom_variables') 
-    let g:smart_template_custom_variables = {};
+    let g:smart_template_custom_variables = {}
 endif 
 
 " debug
 function <SID>StDebug(msg)
     if g:smart_template_debug
-        echom(msg)
+        echom(a:msg)
     endif
 endfunction
 
@@ -64,12 +72,13 @@ endfunction
 
 function <SID>StSearchTemplate(tDir,tName,suffix,mode)
     let l:filePath = a:tDir . a:tName . a:suffix
-    StDebug("found template file in:" . l:filePath)
+    echom(l:filePath)
     if filereadable(l:filePath) 
+        call <SID>StDebug("found template file in: " . l:filePath)
         return l:filePath
     endif
 
-    StDebug("template file is no exist." . l:filePath)
+    call <SID>StDebug("template file is no exist: " . l:filePath)
     return ""
 endfunction
 
@@ -77,7 +86,8 @@ function <SID>EscapeRegex(raw)
     return escape(a:raw, '/')
 endfunction
 
-function <SID>StDoRenderVar(variable,value,flag) 
+"function <SID>StDoRenderVar(variable,value,flag) 
+function <SID>StDoRenderVar(variable,value) 
     silent! execute "%s/\\V%" . <SID>EscapeRegex(a:variable) . "%/" .  <SID>EscapeRegex(a:value) . "/g"
 endfunction
 
@@ -136,7 +146,7 @@ function <SID>StRenderVars()
     call <SID>StDoRenderVar("LICENSE", exists("g:license") ? g:license : "MIT")
 
     " set here
-    call <SID>StRenderHere
+    call <SID>StRenderHere()
 
 endfunction
 
@@ -147,23 +157,23 @@ function <SID>StDoTemplate(template,position)
     endif
 
     let l:fileEmpty = 0 
-    if line("$") == 1 && getLine(1) == ''
+    if line("$") == 1 && getline(1) == ''
         let l:fileEmpty = 1
     endif 
 
-    if a:position = 0 || l:emptyFile = 1
+    if a:position == 0 || l:emptyFile == 1
         " 在文件开头添加
-        execute "keepalt 0r " . l:template
+        execute "keepalt 0r " . a:template
     endif 
 
     " 渲染模板
-    call StRenderVars()
+    call <SID>StRenderVars()
 endfunction
 
 function <SID>StTemplate()
-    let l:template = <SID>StSearchTemplate(g:smart_template_dir,g:smart_template_name,".cc")
+    let l:template = <SID>StSearchTemplate(g:smart_template_dir,g:smart_template_name,".cc",0)
 
-    call StRenderVars(template,0)
+    call <SID>StDoTemplate(template,0)
 endfunction
 
 if g:smart_template_autocmd
@@ -172,4 +182,4 @@ if g:smart_template_autocmd
         autocmd BufNewFile * call <SID>StTemplate()
     augroup END
 endif
-command! -nargs=0 SmartTemplate call StTemplate()
+command! -nargs=0 SmartTemplate call <SID>StTemplate()
