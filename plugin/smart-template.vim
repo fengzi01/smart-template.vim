@@ -1,8 +1,9 @@
-" 
-" Smart-Template
 "
-" @author fengyuwei<fengyuwei01@gmail.com>
-" 
+" Template system for Vim
+"
+" Copyright (C) 2017 fengyuwei <fengyuwei@baidu.com>
+"
+" Distributed under terms of the MIT license.
 "
 
 if exists('g:smart_template_plugin_loaded') 
@@ -153,6 +154,7 @@ endfunction
 " 加载模板主函数
 function <SID>StDoTemplate(template,position) 
     if a:template == ""
+        call <SID>StDebug("template file path is empty.")
         return ""
     endif
 
@@ -171,7 +173,8 @@ function <SID>StDoTemplate(template,position)
 endfunction
 
 function <SID>StTemplate()
-    let l:template = <SID>StSearchTemplate(g:smart_template_dir,g:smart_template_name,".cc",0)
+    let l:fileExt = expand("%:e")
+    let l:template = <SID>StSearchTemplate(g:smart_template_dir,g:smart_template_name,".".l:fileExt,0)
 
     call <SID>StDoTemplate(template,0)
 endfunction
