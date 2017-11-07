@@ -17,7 +17,7 @@ if !exists('g:smart_template_autocmd')
 endif
 
 if !exists('g:smart_template_debug')
-    let g:smart_template_debug = 1
+    let g:smart_template_debug = 0 
 endif
 
 " init 
@@ -172,8 +172,20 @@ function <SID>StDoTemplate(template,position)
     call <SID>StRenderVars()
 endfunction
 
-function <SID>StTemplate()
+function <SID>StFileExt() 
     let l:fileExt = expand("%:e")
+    if l:fileExt == ''
+        StDebug("file ext is empty.: ".expand("%:t"))
+        return ""
+    endif
+    return l:fileExt
+endfunction
+
+function <SID>StTemplate()
+    let l:fileExt = <SID>StFileExt()
+    if l:fileExt == ""
+        return
+    endif
     let l:template = <SID>StSearchTemplate(g:smart_template_dir,g:smart_template_name,".".l:fileExt,0)
 
     call <SID>StDoTemplate(template,0)
