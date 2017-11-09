@@ -13,7 +13,7 @@ endif
 let g:smart_template_plugin_loaded = 1
 
 if !exists('g:smart_template_autocmd')
-    let g:smart_template_autocmd = 1
+    let g:smart_template_autocmd = 0
 endif
 
 if !exists('g:smart_template_debug')
